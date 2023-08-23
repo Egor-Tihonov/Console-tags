@@ -3,7 +3,7 @@
 
 using namespace std;
 
-bool check(int (&x)[4][4], int a);
+bool check_for_repeate(int (&x)[4][4], int a);
 void generate_field(int (&new_game_field)[4][4]);
 bool logic(int (&game_field)[4][4], int (&correct_field)[4][4]);
 bool find_elem(int (&game_field)[4][4], int a, int &x, int &y, int &x0, int &y0);
@@ -142,7 +142,7 @@ void generate_field(int (&new_game_field)[4][4])
             do
             {
                 new_value = 1 + rand() % 15;
-                a = check(new_game_field, new_value);
+                a = check_for_repeate(new_game_field, new_value);
             } while (!a);
 
             new_game_field[i][j] = new_value;
@@ -150,7 +150,7 @@ void generate_field(int (&new_game_field)[4][4])
     }
 }
 
-bool check(int (&x)[4][4], int a)
+bool check_for_repeate(int (&x)[4][4], int a)
 {
     for (int i = 0; i < 4; i++)
     {
