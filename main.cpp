@@ -4,11 +4,11 @@
 
 using namespace std;
 
-bool check(int (&x)[4][4], int a);
-void generate_field(int (&new_game_field)[4][4]);
-bool logic(int (&game_field)[4][4], int (&correct_field)[4][4]);
-bool find_elem(int (&game_field)[4][4], int a, int &x, int &y, int &x0, int &y0);
-bool find_elem(int (&game_field)[4][4], int a, int &x, int &y);
+bool check(int (&)[4][4], int a);
+void generate_field(int (&)[4][4]);
+bool logic(int (&)[4][4], int (&)[4][4]);
+bool find_elem(int (&)[4][4], int a, int &x, int &y, int &x0, int &y0);
+bool find_elem(int (&)[4][4], int a, int &x, int &y);
 
 int main(int argc, char *argv[])
 {
