@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Windows.h>
+#include <math.h>
 
 using namespace std;
 
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
     {
         a = logic(game_field, correct_field);
         cout << "\n";
+        system("cls");
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
