@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     {
         a = logic(game_field, correct_field);
         cout << "\n";
+        system("cls");
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -111,7 +112,7 @@ bool find_elem(int (&game_field)[4][4], int a, int &x, int &y, int &x0, int &y0)
         {
             if (game_field[i][j] == a)
             {
-                if (((i - 1) == x0 && j == y) || (i == x0 && j + 1 == y0) || ((i + 1) == x0 && j == y0) || (i == x0 && (j - 1) == y0))
+                if (((i - 1) == x0 && j == y0) || (i == x0 && j + 1 == y0) || ((i + 1) == x0 && j == y0) || (i == x0 && (j - 1) == y0))
                 {
                     x = i;
                     y = j;
