@@ -29,7 +29,11 @@ int main(int argc, char *argv[])
         print(game_field);
 
     } while (!a);
+
     cout << "You win! Congrats!";
+    system("pause");
+    
+    return 0;
 }
 
 // Print field
@@ -82,11 +86,7 @@ bool logic(int (&game_field)[4][4], const int (&correct_field)[4][4])
     {
         for (int j = 0; j < 4; j++)
         {
-            if (game_field[i][j] == correct_field[i][j])
-            {
-                continue;
-            }
-            else
+            if (game_field[i][j] != correct_field[i][j])
             {
                 return false;
             }
