@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     cout << "You win! Congrats!";
     system("pause");
-    
+
     return 0;
 }
 
