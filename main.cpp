@@ -1,172 +1,159 @@
 #include <iostream>
 #include <Windows.h>
-#include <math.h>
 
 using namespace std;
 
-bool check(int (&)[4][4], int a);
-void generate_field(int (&)[4][4]);
-bool logic(int (&)[4][4], int (&)[4][4]);
-bool find_elem(int (&)[4][4], int a, int &x, int &y, int &x0, int &y0);
-bool find_elem(int (&)[4][4], int a, int &x, int &y);
-
-int main(int argc, char *argv[])
+class Game
 {
-    int correct_field[4][4] = {{1, 2, 3, 4},
-                               {5, 6, 7, 8},
-                               {9, 10, 11, 12},
-                               {13, 14, 15}};
-    int game_field[4][4];
-    generate_field(game_field);
-
-    for (int i = 0; i < 4; i++)
+public:
+    // Print field
+    void print()
     {
-        for (int j = 0; j < 4; j++)
-        {
-            cout << game_field[i][j] << "\t";
-        }
-        cout << "\n";
-    }
-
-    bool a = false;
-
-    do
-    {
-        a = logic(game_field, correct_field);
-        cout << "\n";
-        system("cls");
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
             {
                 cout << game_field[i][j] << "\t";
             }
-            cout << "\n";
+            cout << "\n\n";
         }
-
-    } while (!a);
-    cout << "You win! Congrats!";
-}
-
-bool logic(int (&game_field)[4][4], int (&correct_field)[4][4])
-{
-    int a, x, y, x0, y0;
-    cout << "Enter number for switch\n";
-    cin >> a;
-    if (a <= 0 || a > 15)
-    {
-        return false;
-    }
-    bool check_for_zero = find_elem(game_field, 0, x0, y0);
-    if (!check_for_zero)
-    {
-        return false;
-    }
-    bool check_for_correct_numb = find_elem(game_field, a, x, y, x0, y0);
-
-    if (!check_for_correct_numb)
-    {
-        return false;
     }
 
-    game_field[x0][y0] = game_field[x][y];
-    game_field[x][y] = 0;
-
-    for (int i = 0; i < 4; i++)
+    void generate_field()
     {
-        for (int j = 0; j < 4; j++)
+        int new_value = 0, n = 0;
+        bool a = false;
+
+        srand(time(0));
+
+        for (int i = 0; i < 4; i++)
         {
-            if (game_field[i][j] == correct_field[i][j])
+            for (int j = 0; j < 4; j++)
             {
-                continue;
-            }
-            else
-            {
-                return false;
+
+                do
+                {
+                    new_value = n + rand() % 15;
+                    a = check_for_repeate(game_field, new_value);
+                } while (!a);
+
+                if (new_value == 0) // we need only one 0 so, next generations starts with 1
+                {
+                    n = 1;
+                }
+
+                game_field[i][j] = new_value;
             }
         }
     }
-    return true;
-}
 
-bool find_elem(int (&game_field)[4][4], int a, int &x, int &y)
-{
-    for (int i = 0; i < 4; i++)
+    bool logic()
     {
-        for (int j = 0; j < 4; j++)
+        int a, x, y, x0, y0;
+        cout << "Enter number for switch\n";
+        cin >> a;
+        if (a <= 0 || a > 15)
         {
-            if (game_field[i][j] == a)
+            return false;
+        }
+
+        bool check_for_zero = find_elem(0, x0, y0); // get 0 postion
+        if (!check_for_zero)
+        {
+            return false;
+        }
+
+        bool check_for_move = find_elem(a, x, y); // get position of enter number
+        if (!check_for_move)
+        {
+            return false;
+        }
+
+        if (((x - 1) == x0 && y == y0) || (x == x0 && y + 1 == y0) || ((x + 1) == x0 && y == y0) || (x == x0 && (y - 1) == y0)) // check if numb near 0 on the field
+        {
+            game_field[x0][y0] = game_field[x][y]; // move numbers
+            game_field[x][y] = 0;
+        }
+        else
+        {
+            return false;
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
             {
-                x = i;
-                y = j;
-                return 1;
+                if (game_field[i][j] != correct_field[i][j])
+                {
+                    return false;
+                }
             }
         }
+        return true;
     }
-}
 
-bool find_elem(int (&game_field)[4][4], int a, int &x, int &y, int &x0, int &y0)
-{
-    for (int i = 0; i < 4; i++)
+private:
+    int game_field[4][4];
+    const int correct_field[4][4] = {{1, 2, 3, 4},
+                                     {5, 6, 7, 8},
+                                     {9, 10, 11, 12},
+                                     {13, 14, 15}};
+
+    bool check_for_repeate(int (&x)[4][4], int a)
     {
-        for (int j = 0; j < 4; j++)
+        for (int i = 0; i < 4; i++)
         {
-            if (game_field[i][j] == a)
+            for (int j = 0; j < 4; j++)
             {
-                if (((i - 1) == x0 && j == y) || (i == x0 && j + 1 == y0) || ((i + 1) == x0 && j == y0) || (i == x0 && (j - 1) == y0))
+                if (x[i][j] == a && a == 0) // if a is 0 we allow to stay
+                {
+                    return true;
+                }
+                else if (x[i][j] == a)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    bool find_elem(int a, int &x, int &y)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (game_field[i][j] == a)
                 {
                     x = i;
                     y = j;
                     return 1;
                 }
-                return 0;
             }
         }
+        return 0;
     }
-}
+};
 
-void generate_field(int (&new_game_field)[4][4])
+int main(int argc, char *argv[])
 {
-    int new_value;
+    Game new_game;
+    new_game.generate_field();
+
+    new_game.print();
+
     bool a = false;
-    srand(time(0));
-    for (int i = 0; i < 4; i++)
+
+    do
     {
-        for (int j = 0; j < 4; j++)
-        {
+        a = new_game.logic();
+        system("cls");
+        new_game.print();
 
-            if (i == 2 && j == 1)
-            {
-                new_game_field[i][j] = 0;
-                continue;
-            }
+    } while (!a);
 
-            do
-            {
-                new_value = 1 + rand() % 15;
-                a = check(new_game_field, new_value);
-            } while (!a);
+    cout << "You win! Congrats!";
+    system("pause");
 
-            new_game_field[i][j] = new_value;
-        }
-    }
-}
-
-bool check(int (&x)[4][4], int a)
-{
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (x[i][j] == a)
-            {
-                return false;
-            }
-            else
-            {
-                continue;
-            }
-        }
-    }
-    return true;
+    return 0;
 }
