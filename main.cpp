@@ -5,16 +5,16 @@ using namespace std;
 
 bool check_for_repeate(int (&)[4][4], int a);
 void generate_field(int (&)[4][4]);
-bool logic(int (&)[4][4], int (&)[4][4]);
+bool logic(int (&)[4][4], const int (&)[4][4]);
 bool find_elem_get_position(int (&)[4][4], int a, int &x, int &y);
 void print(int (&)[4][4]);
 
 int main(int argc, char *argv[])
 {
-    int correct_field[4][4] = {{1, 2, 3, 4},
-                               {5, 6, 7, 8},
-                               {9, 10, 11, 12},
-                               {13, 14, 15}};
+    const int correct_field[4][4] = {{1, 2, 3, 4},
+                                     {5, 6, 7, 8},
+                                     {9, 10, 11, 12},
+                                     {13, 14, 15}};
     int game_field[4][4];
     generate_field(game_field);
 
@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     cout << "You win! Congrats!";
 }
 
+// Print field
 void print(int (&field)[4][4])
 {
     for (int i = 0; i < 4; i++)
@@ -44,7 +45,8 @@ void print(int (&field)[4][4])
     }
 }
 
-bool logic(int (&game_field)[4][4], int (&correct_field)[4][4])
+// Game logic
+bool logic(int (&game_field)[4][4], const int (&correct_field)[4][4])
 {
     int a, x, y, x0, y0;
     cout << "Enter number for switch\n";
@@ -93,6 +95,7 @@ bool logic(int (&game_field)[4][4], int (&correct_field)[4][4])
     return true;
 }
 
+// Find elem that user enter and find its position
 bool find_elem_get_position(int (&game_field)[4][4], int a, int &x, int &y)
 {
     for (int i = 0; i < 4; i++)
@@ -110,6 +113,7 @@ bool find_elem_get_position(int (&game_field)[4][4], int a, int &x, int &y)
     return 0;
 }
 
+// Genarte game field
 void generate_field(int (&new_game_field)[4][4])
 {
     int new_value = 0, n = 0;
@@ -122,19 +126,13 @@ void generate_field(int (&new_game_field)[4][4])
         for (int j = 0; j < 4; j++)
         {
 
-            // if (i == 2 && j == 1)
-            // {
-            //     new_game_field[i][j] = 0;
-            //     continue;
-            // }
-
             do
             {
                 new_value = n + rand() % 15;
                 a = check_for_repeate(new_game_field, new_value);
             } while (!a);
 
-            if (new_value == 0)
+            if (new_value == 0) // we need only one 0 so, next generations starts with 1
             {
                 n = 1;
             }
@@ -144,13 +142,14 @@ void generate_field(int (&new_game_field)[4][4])
     }
 }
 
+// Check for repeate generate at the field
 bool check_for_repeate(int (&x)[4][4], int a)
 {
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            if (x[i][j] == a && a == 0)
+            if (x[i][j] == a && a == 0) // if a is 0 we allow to stay
             {
                 return true;
             }
